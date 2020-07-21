@@ -11,7 +11,10 @@ const model = Schema.Model({
 
 const Login = () => {
   return (
-    <div id="login" className="flex min-h-screen justify-center items-center flex-col">
+    <div
+      id="login"
+      className="flex min-h-screen justify-center items-center flex-col"
+    >
       <img src="jpg/cesfam.jpg" alt="cesfam" className="h-40" />
 
       <Form model={model}>
