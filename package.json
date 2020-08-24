@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "prettier": "prettier --write ./pages/**/*.tsx && prettier --write ./src/**/*.{ts,tsx,scss}",
+    "prettier": "prettier --write ./pages/**/*.tsx ./src/**/*.{ts,tsx,scss}",
     "lint:fix": "eslint --fix ./pages/**/*.tsx ./src/**/*.{ts,tsx}"
   },
   "dependencies": {
