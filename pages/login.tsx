@@ -1,41 +1,54 @@
 import React from "react";
 import Router from "next/router";
-import { Form, Schema, ButtonToolbar, Button } from "rsuite";
-import TextField from "../components/Forms/TextField";
+import { Form, Input, Button, Checkbox } from "antd";
 
-const { StringType } = Schema.Types;
-
-const model = Schema.Model({
-  name: StringType().isRequired("Este campo es requerido."),
-  password: StringType().isRequired("Este campo es requerido."),
-});
+const layout = {
+  labelCol: { span: 8 },
+  wrapperCol: { span: 16 },
+};
+const tailLayout = {
+  wrapperCol: { offset: 8, span: 16 },
+};
 
 const Login = () => {
-  const onLogin = (e) => {
-    console.log("e: ", e);
-
+  const onLogin = () => {
     localStorage.setItem("token", "ayye");
     Router.push("/login");
   };
 
   return (
-    <div
-      id="login"
-      className="flex min-h-screen justify-center items-center flex-col"
+    <Form
+      {...layout}
+      name="basic"
+      initialValues={{ remember: true }}
+      onFinish={onLogin}
     >
-      <img src="jpg/cesfam.jpg" alt="cesfam" className="h-40" />
+      <Form.Item
+        label="Username"
+        name="username"
+        rules={[{ required: true, message: "Please input your username!" }]}
+      >
+        <Input />
+      </Form.Item>
 
-      <Form model={model} onSubmit={onLogin}>
-        <TextField name="name" label="Usuario" />
-        <TextField name="password" label="Contraseña" />
+      <Form.Item
+        label="Password"
+        name="password"
+        rules={[{ required: true, message: "Please input your password!" }]}
+      >
+        <Input.Password />
+      </Form.Item>
 
-        <ButtonToolbar className="flex justify-center">
-          <Button appearance="primary" type="submit">
-            Iniciar sesión
-          </Button>
-        </ButtonToolbar>
-      </Form>
-    </div>
+      <Form.Item {...tailLayout} name="remember" valuePropName="checked">
+        <Checkbox>Remember me</Checkbox>
+      </Form.Item>
+
+      <Form.Item {...tailLayout}>
+        <Button type="primary" htmlType="submit">
+          Submit
+        </Button>
+      </Form.Item>
+    </Form>
   );
 };
 
