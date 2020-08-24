@@ -22,6 +22,7 @@ const Login = () => {
       name="basic"
       initialValues={{ remember: true }}
       onFinish={onLogin}
+      className="p-20"
     >
       <Form.Item
         label="Username"
