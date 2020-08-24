@@ -1,28 +1,18 @@
-import Link from "next/link";
-import { Button } from "rsuite";
-import { useQuery } from "@apollo/react-hooks";
-import { gql } from "apollo-boost";
+import { useEffect } from "react";
+import Router from "next/router";
 
-const Home = () => {
-  const { data } = useQuery(gql`
-    query Consumers {
-      consumers {
-        id
-        name
-      }
+const Index = () => {
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      Router.push("/home");
+    } else {
+      Router.push("/login");
     }
-  `);
-  console.log("data: ", data);
+  }, []);
 
-  return (
-    <div className="flex min-h-screen justify-center items-center">
-      <Button>
-        <Link href="/login">
-          <a>Login</a>
-        </Link>
-      </Button>
-    </div>
-  );
+  return null;
 };
 
-export default Home;
+export default Index;

@@ -1,4 +1,5 @@
 import React from "react";
+import Router from "next/router";
 import { Form, Schema, ButtonToolbar, Button } from "rsuite";
 import TextField from "../components/Forms/TextField";
 
@@ -10,6 +11,13 @@ const model = Schema.Model({
 });
 
 const Login = () => {
+  const onLogin = (e) => {
+    console.log("e: ", e);
+
+    localStorage.setItem("token", "ayye");
+    Router.push("/login");
+  };
+
   return (
     <div
       id="login"
@@ -17,7 +25,7 @@ const Login = () => {
     >
       <img src="jpg/cesfam.jpg" alt="cesfam" className="h-40" />
 
-      <Form model={model}>
+      <Form model={model} onSubmit={onLogin}>
         <TextField name="name" label="Usuario" />
         <TextField name="password" label="Contraseña" />
 
