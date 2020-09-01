@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --gray: "#F6F6F6";
+}
+
 body,
 html {
   margin: 0;
