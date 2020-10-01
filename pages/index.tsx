@@ -85,10 +85,13 @@ const Index = () => {
     }
   }, [getVehicleModelsData]);
 
-  const LoadingGrid = () =>
-    [...Array(10)].map(() => (
-      <Card key={Math.random()} loading={eVesLoading} />
-    ));
+  const LoadingGrid = () => (
+    <>
+      {[...Array(10)].map(() => (
+        <Card key={Math.random()} loading={eVesLoading} />
+      ))}
+    </>
+  );
 
   const handleMakeChange = async (makes: string[]) => {
     setSkip(0);
