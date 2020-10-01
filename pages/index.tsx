@@ -1,12 +1,14 @@
+import React, { useEffect, useState } from "react";
 import { useLazyQuery, useQuery } from "@apollo/react-hooks";
 import { Card, Select } from "antd";
-import React, { useEffect, useState } from "react";
 import { useBottomScrollListener } from "react-bottom-scroll-listener";
-import EVECard from "../src/components/EVECard";
 import { Vehicle } from "../src/gql";
 import { IVehiclesByMakesVars } from "../src/gql/Vehicle/queries";
 
 import { IVehicle } from "../src/gql/Vehicle/Types";
+import { EVECard } from "../src/components";
+
+export {};
 
 const { Option } = Select;
 
