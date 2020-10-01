@@ -18,6 +18,8 @@ const Index = () => {
   const [vehicles, setVehicles] = useState<IVehicle[]>([]);
   const [skip, setSkip] = useState<number>(0);
   const [hasFetchedAll, setHasFetchedAll] = useState<boolean>(false);
+  const [makesLoading, setMakesLoading] = useState<boolean>(false);
+  const [modelsLoading, setModelsLoading] = useState<boolean>(false);
 
   const [makesSelected, setMakesSelected] = useState<string[]>([]);
 
@@ -37,32 +39,33 @@ const Index = () => {
   });
 
   // * Fetch Makes
-  const { data: vehicleMakesData, loading: vehicleMakesLoading } = useQuery<{
+  const { data: vehicleMakesData } = useQuery<{
     vehicleMakes: string[];
   }>(Vehicle.queries.vehiclesMakes);
 
   // * Fetch Models
-  const [
-    getVehicleModels,
-    { data: getVehicleModelsData, loading: getVehicleModelsLoading },
-  ] = useLazyQuery<
+  const [getVehicleModels, { data: getVehicleModelsData }] = useLazyQuery<
     {
       getVehicleModels: string[];
     },
     { makes: string[] }
   >(Vehicle.queries.getVehicleModels);
 
-  const fetchMore = () => {
-    if (!hasFetchedAll) {
-      getEVEs({
-        variables: {
-          skip: skip + CAR_SET,
-        },
-        updateQuery(_, { fetchMoreResult }) {
-          return fetchMoreResult;
-        },
-      });
-      setSkip(skip + CAR_SET);
+  const fetchMore = async () => {
+    try {
+      if (!hasFetchedAll) {
+        await getEVEs({
+          variables: {
+            skip: skip + CAR_SET,
+          },
+          updateQuery(_, { fetchMoreResult }) {
+            return fetchMoreResult;
+          },
+        });
+        setSkip(skip + CAR_SET);
+      }
+    } catch (error) {
+      console.error("error: ", error);
     }
   };
   useBottomScrollListener(fetchMore);
@@ -95,9 +98,7 @@ const Index = () => {
       {[...Array(10)].map(() => (
         <Card
           key={Math.random()}
-          loading={
-            eVesLoading || vehicleMakesLoading || getVehicleModelsLoading
-          }
+          loading={eVesLoading || makesLoading || modelsLoading}
         />
       ))}
     </>
@@ -123,21 +124,28 @@ const Index = () => {
       variables.models = modelsSelected;
     }
 
-    getEVEs({
-      variables,
-      updateQuery(_, { fetchMoreResult }) {
-        return fetchMoreResult;
-      },
-    });
+    setMakesLoading(true);
+    try {
+      getVehicleModels({
+        variables: {
+          makes,
+        },
+      });
 
-    getVehicleModels({
-      variables: {
-        makes,
-      },
-    });
+      await getEVEs({
+        variables,
+        updateQuery(_, { fetchMoreResult }) {
+          return fetchMoreResult;
+        },
+      });
+    } catch (error) {
+      console.error("error: ", error);
+    } finally {
+      setMakesLoading(false);
+    }
   };
 
-  const handleModelChange = (models: string[]) => {
+  const handleModelChange = async (models: string[]) => {
     setSkip(0);
 
     const isEmpty = !models[0].length;
@@ -153,12 +161,19 @@ const Index = () => {
       variables.models = models;
     }
 
-    getEVEs({
-      variables,
-      updateQuery(_, { fetchMoreResult }) {
-        return fetchMoreResult;
-      },
-    });
+    setModelsLoading(true);
+    try {
+      await getEVEs({
+        variables,
+        updateQuery(_, { fetchMoreResult }) {
+          return fetchMoreResult;
+        },
+      });
+    } catch (error) {
+      console.error("error: ", error);
+    } finally {
+      setModelsLoading(false);
+    }
   };
 
   return (
@@ -207,18 +222,17 @@ const Index = () => {
         </div>
 
         <div className="grid grid-cols-5 gap-5">
-          {vehicles.map((v) => (
-            <EVECard
-              key={v.Vehicle_ID}
-              imgSource={v.Images[0]}
-              title={`${v.Vehicle_Make} ${v.Vehicle_Model}`}
-              description={v.Vehicle_Model_Version}
-            />
-          ))}
+          {!makesLoading
+            && vehicles.map((v) => (
+              <EVECard
+                key={v.Vehicle_ID}
+                imgSource={v.Images[0]}
+                title={`${v.Vehicle_Make} ${v.Vehicle_Model}`}
+                description={v.Vehicle_Model_Version}
+              />
+            ))}
 
-          {(eVesLoading || vehicleMakesLoading || getVehicleModelsLoading) && (
-            <LoadingGrid />
-          )}
+          {(eVesLoading || makesLoading || modelsLoading) && <LoadingGrid />}
         </div>
       </div>
     </div>
