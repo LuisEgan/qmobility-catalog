@@ -37,12 +37,15 @@ const Index = () => {
   });
 
   // * Fetch Makes
-  const { data: vehicleMakesData } = useQuery<{
+  const { data: vehicleMakesData, loading: vehicleMakesLoading } = useQuery<{
     vehicleMakes: string[];
   }>(Vehicle.queries.vehiclesMakes);
 
   // * Fetch Models
-  const [getVehicleModels, { data: getVehicleModelsData }] = useLazyQuery<
+  const [
+    getVehicleModels,
+    { data: getVehicleModelsData, loading: getVehicleModelsLoading },
+  ] = useLazyQuery<
     {
       getVehicleModels: string[];
     },
@@ -90,7 +93,12 @@ const Index = () => {
   const LoadingGrid = () => (
     <>
       {[...Array(10)].map(() => (
-        <Card key={Math.random()} loading={eVesLoading} />
+        <Card
+          key={Math.random()}
+          loading={
+            eVesLoading || vehicleMakesLoading || getVehicleModelsLoading
+          }
+        />
       ))}
     </>
   );
@@ -208,7 +216,9 @@ const Index = () => {
             />
           ))}
 
-          {eVesLoading && <LoadingGrid />}
+          {(eVesLoading || vehicleMakesLoading || getVehicleModelsLoading) && (
+            <LoadingGrid />
+          )}
         </div>
       </div>
     </div>
