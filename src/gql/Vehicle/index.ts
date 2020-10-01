@@ -1,7 +1,7 @@
-import queries from "./queries";
 import mutations from "./mutations";
+import queries from "./queries";
 
 export default {
-  queries,
   mutations,
+  queries,
 };

@@ -6,6 +6,7 @@ import ApolloClient, {
   InMemoryCache,
   NormalizedCacheObject,
 } from "apollo-boost";
+import { message } from "antd";
 
 import "../src/less/antd.less";
 import "../src/scss/index.scss";
@@ -16,26 +17,17 @@ interface IProps extends AppProps {
 
 const setApolloClient = ({ initialState }) =>
   new ApolloClient({
-    uri: "https://api.whyxapp.com/whyx/graphql",
+    uri: "https://backend-qmobility.azurewebsites.net/graphql/",
     cache: new InMemoryCache().restore(initialState || {}),
-    request: async (operation) => {
-      try {
-        const authorization = "login";
-        const headers = { authorization };
-
-        operation.setContext({
-          headers,
-        });
-      } catch (error) {
-        console.error("error: ", error);
-      }
+    onError: () => {
+      message.error("Network error!");
     },
   });
 
 const App = ({ Component, pageProps, apollo }: IProps) => (
   <ApolloProvider client={apollo}>
     <Head>
-      <title>Cesfam</title>
+      <title>qmobility</title>
       <link rel="icon" href="/favicon.ico" />
     </Head>
     <Component {...pageProps} />
