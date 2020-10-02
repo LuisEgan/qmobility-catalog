@@ -182,7 +182,7 @@ const Index = () => {
         <span className="text-5xl">eVe Catalogue</span>
       </div>
 
-      <div className="p-24">
+      <div className="p-10 lg:p-24">
         <div className="flex pb-10">
           <div className="flex flex-col flex-1 pr-3">
             <span>Makes</span>
@@ -221,7 +221,7 @@ const Index = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-5 gap-5">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-5">
           {!makesLoading
             && vehicles.map((v) => (
               <EVECard

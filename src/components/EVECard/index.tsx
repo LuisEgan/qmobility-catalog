@@ -16,7 +16,7 @@ const EVECard = (props: ICard) => {
   const { imgSource, title, description } = props;
 
   return (
-    <div className="flex justify-center">
+    <div className="card-container flex justify-center">
       <Card
         hoverable
         style={{ width: 180 }}
