@@ -187,6 +187,8 @@ const Index = () => {
           <div className="flex flex-col flex-1 pr-3">
             <span>Makes</span>
             <Select
+              virtual={false}
+              allowClear
               className="py-3"
               mode="multiple"
               placeholder="Select Makes"
@@ -205,6 +207,8 @@ const Index = () => {
           <div className="flex flex-col flex-1 pl-3">
             <span>Models</span>
             <Select
+              virtual={false}
+              allowClear
               mode="multiple"
               className="py-3"
               placeholder="Select Model"
