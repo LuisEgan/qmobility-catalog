@@ -10,6 +10,7 @@ import { message } from "antd";
 
 import "../src/less/antd.less";
 import "../src/scss/index.scss";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 
 interface IProps extends AppProps {
   apollo: ApolloClient<NormalizedCacheObject>;

@@ -6,7 +6,7 @@ import { Vehicle } from "../src/gql";
 import { IVehiclesByMakesVars } from "../src/gql/Vehicle/queries";
 
 import { IVehicle } from "../src/gql/Vehicle/Types";
-import { EVECard } from "../src/components";
+import { Drawer, EVECard } from "../src/components";
 
 export {};
 
@@ -25,6 +25,9 @@ const Index = () => {
 
   const [modelsOpts, setModelsOpts] = useState<string[]>([]);
   const [modelsSelected, setModelsSelected] = useState<string[]>([]);
+
+  const [isDrawerVisible, setIsDrawerVisible] = useState<boolean>(false);
+  const [selectedEve, setSelectedEve] = useState<IVehicle>();
 
   // * Fetch eVes
   const { data: eVes, loading: eVesLoading, fetchMore: getEVEs } = useQuery<
@@ -176,8 +179,18 @@ const Index = () => {
     }
   };
 
+  const selectEve = (v: IVehicle) => {
+    setSelectedEve(v);
+    setIsDrawerVisible(true);
+  };
+
   return (
     <div>
+      <Drawer
+        {...{ visible: isDrawerVisible, eve: selectedEve }}
+        onClose={() => setIsDrawerVisible(false)}
+      />
+
       <div className="h-20 font-bold text-center flex justify-center items-center">
         <span className="text-5xl">eVe Catalogue</span>
       </div>
@@ -229,6 +242,7 @@ const Index = () => {
           {!makesLoading
             && vehicles.map((v) => (
               <EVECard
+                onClick={() => selectEve(v)}
                 key={v.Vehicle_ID}
                 imgSource={v.Images[0]}
                 title={`${v.Vehicle_Make} ${v.Vehicle_Model}`}

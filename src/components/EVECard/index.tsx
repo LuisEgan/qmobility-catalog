@@ -8,16 +8,18 @@ interface ICard {
   imgSource: string;
   title: string;
   description: string;
+  onClick?: () => void;
 }
 
 const EVECard = (props: ICard) => {
   const [isLoaded, setIsLoaded] = useState(false);
 
-  const { imgSource, title, description } = props;
+  const { imgSource, title, description, onClick } = props;
 
   return (
     <div className="card-container flex justify-center">
       <Card
+        onClick={onClick}
         hoverable
         style={{ width: 180 }}
         cover={(

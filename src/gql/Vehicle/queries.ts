@@ -35,13 +35,21 @@ const getVehicleByMakesAndModels = gql`
       }
     ) {
       Vehicle_ID
+      Images
       Vehicle_Make
       Vehicle_Model
       Vehicle_Model_Version
-      Misc_Seats
+      Battery_Capacity_Useable
+      Battery_Capacity_Full
+      Battery_Capacity_Estimate
       Range_Real
+      Availability_Status
       Availability_Date_From
-      Images
+      Performance_Topspeed
+      Fastcharge_ChargeTime
+      Efficiency_Real
+      Price_From_UK
+      Misc_Seats
       id
     }
   }
@@ -59,8 +67,15 @@ const getVehicleModels = gql`
   }
 `;
 
+const bookTestDrive = gql`
+  query BookTestDrive {
+    bookTestDrive
+  }
+`;
+
 export default {
   getVehicleByMakesAndModels,
   vehiclesMakes,
   getVehicleModels,
+  bookTestDrive,
 };

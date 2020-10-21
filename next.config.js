@@ -1,6 +1,7 @@
 const withPlugins = require("next-compose-plugins");
 const withLess = require("@zeit/next-less");
 const withSass = require("@zeit/next-sass");
+const withCSS = require("@zeit/next-css");
 
 const config = {
   lessLoaderOptions: {
@@ -50,4 +51,4 @@ const config = {
   },
 };
 
-module.exports = withPlugins([withSass, withLess], config);
+module.exports = withPlugins([withSass, withLess, withCSS], config);
