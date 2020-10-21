@@ -74,7 +74,7 @@ const Drawer = (props: IDrawer) => {
         {eve?.Vehicle_Model_Version}
       </span>
 
-      <Carousel className="mt-10">
+      <Carousel className="m-auto pt-10 lg:w-3/4 ">
         {eve?.Images.slice(0, 5).map((i) => (
           <img key={i} src={i} alt={i} />
         ))}
