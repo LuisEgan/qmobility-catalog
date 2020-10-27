@@ -112,7 +112,7 @@ const Index = () => {
     const isEmpty = !makes[0].length;
     setMakesSelected(isEmpty ? [] : makes);
 
-    const variables: IVehiclesByMakesVars = {
+    const variables: IGetVehicleByMakesAndModelsVars = {
       skip: 0,
     };
 
@@ -155,7 +155,7 @@ const Index = () => {
 
     setModelsSelected(isEmpty ? [] : models);
 
-    const variables: IVehiclesByMakesVars = {
+    const variables: IGetVehicleByMakesAndModelsVars = {
       makes: makesSelected,
       skip: 0,
     };
