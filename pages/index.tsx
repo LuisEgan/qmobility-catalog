@@ -3,7 +3,7 @@ import { useLazyQuery, useQuery } from "@apollo/react-hooks";
 import { Card, Select } from "antd";
 import { useBottomScrollListener } from "react-bottom-scroll-listener";
 import { Vehicle } from "../src/gql";
-import { IVehiclesByMakesVars } from "../src/gql/Vehicle/queries";
+import { IGetVehicleByMakesAndModelsVars } from "../src/gql/Vehicle/queries";
 
 import { IVehicle } from "../src/gql/Vehicle/Types";
 import { Drawer, EVECard } from "../src/components";
@@ -32,7 +32,7 @@ const Index = () => {
   // * Fetch eVes
   const { data: eVes, loading: eVesLoading, fetchMore: getEVEs } = useQuery<
     { getVehicleByMakesAndModels: IVehicle[] },
-    IVehiclesByMakesVars
+    IGetVehicleByMakesAndModelsVars
   >(Vehicle.queries.getVehicleByMakesAndModels, {
     variables: {
       skip: 0,

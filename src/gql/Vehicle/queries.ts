@@ -1,13 +1,13 @@
 import { gql } from "apollo-boost";
 
-export interface IVehiclesByMakesVars {
+export interface IGetVehicleByMakesAndModelsVars {
   makes?: string[];
   models?: string[];
   skip?: number;
   limit?: number;
 }
 
-export interface IvehiclesByMakes {
+export interface IGetVehicleByMakesAndModels {
   Vehicle_ID: string;
   Vehicle_Make: string;
   Vehicle_Model: string;
@@ -67,9 +67,16 @@ const getVehicleModels = gql`
   }
 `;
 
+export interface IBookTestDriveVars {
+  email: string;
+  name?: string;
+  carId: number;
+}
 const bookTestDrive = gql`
-  query BookTestDrive {
-    bookTestDrive
+  query BookTestDrive($email: String!, $name: String, $carId: Float!) {
+    bookTestDriveCatalog(
+      bookTestDriveInput: { email: $email, name: $name, carId: $carId }
+    )
   }
 `;
 

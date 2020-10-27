@@ -1,5 +1,13 @@
-import { useEffect } from "react";
-import { Drawer as DrawerAntd, Divider, Button, message, Spin } from "antd";
+import { useEffect, useState } from "react";
+import {
+  Drawer as DrawerAntd,
+  Divider,
+  Button,
+  message,
+  Spin,
+  Modal,
+  Input,
+} from "antd";
 import { Carousel } from "react-responsive-carousel";
 import { useLazyQuery } from "@apollo/react-hooks";
 import { IVehicle } from "../../gql/Vehicle/Types";
@@ -16,6 +24,7 @@ import Pound from "../../../public/svg/pound.svg";
 import "./styles.scss";
 import { Vehicle } from "../../gql";
 import { kmToMiles } from "../../lib/numbers";
+import { IBookTestDriveVars } from "../../gql/Vehicle/queries";
 
 interface IDrawer {
   onClose?: () => void;
@@ -32,15 +41,43 @@ interface IItem {
 const Drawer = (props: IDrawer) => {
   const { onClose, visible, eve } = props;
 
-  const [bookTestDrive, { data, loading }] = useLazyQuery<{
-    bookTestDrive: boolean;
-  }>(Vehicle.queries.bookTestDrive);
+  const [bookTestDrive, { data: bookTestDriveData, loading }] = useLazyQuery<
+    {
+      bookTestDrive: boolean;
+    },
+    IBookTestDriveVars
+  >(Vehicle.queries.bookTestDrive);
+
+  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+  const [email, setEmail] = useState<string>("");
+  const [name, setName] = useState<string>("");
 
   useEffect(() => {
-    if (data) {
+    if (bookTestDriveData) {
       message.success("We'll contact you soon!");
+      setIsModalVisible(false);
     }
-  }, [data]);
+  }, [bookTestDriveData]);
+
+  const onBookTestDrive = () => {
+    if (email && name) {
+      bookTestDrive({
+        variables: {
+          name,
+          email,
+          carId: eve?.Vehicle_ID,
+        },
+      });
+    } else {
+      message.warning("Please enter all your information.");
+    }
+  };
+
+  const resetForm = () => {
+    setEmail("");
+    setName("");
+    setIsModalVisible(false);
+  };
 
   const Item = (item: IItem) => {
     const { icon, title, description } = item;
@@ -66,6 +103,28 @@ const Drawer = (props: IDrawer) => {
       visible={visible}
       className="drawer"
     >
+      <Modal
+        title="How could we contact you?"
+        visible={isModalVisible}
+        onOk={onBookTestDrive}
+        onCancel={resetForm}
+        okText="Let's go"
+        cancelText="Not yet"
+      >
+        <Input
+          value={name}
+          placeholder="What's your name?"
+          onChange={(e) => setName(e.target.value)}
+          style={{ margin: "2vh 0" }}
+        />
+        <Input
+          value={email}
+          placeholder="your@email.com"
+          type="email"
+          onChange={(e) => setEmail(e.target.value)}
+        />
+      </Modal>
+
       <span className="text-2xl font-bold">
         {eve?.Vehicle_Make}
         {" "}
@@ -74,7 +133,7 @@ const Drawer = (props: IDrawer) => {
         {eve?.Vehicle_Model_Version}
       </span>
 
-      <Carousel className="m-auto pt-10 lg:w-3/4 ">
+      <Carousel className="m-auto pt-10 lg:w-3/4" autoPlay>
         {eve?.Images.slice(0, 5).map((i) => (
           <img key={i} src={i} alt={i} />
         ))}
@@ -128,7 +187,7 @@ const Drawer = (props: IDrawer) => {
 
       <Button
         type={loading ? "ghost" : "primary"}
-        onClick={() => bookTestDrive()}
+        onClick={() => setIsModalVisible(true)}
       >
         {loading ? <Spin /> : "Book test drive"}
       </Button>
